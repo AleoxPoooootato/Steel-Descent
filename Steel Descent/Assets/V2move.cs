@@ -10,8 +10,8 @@ public class V2move : MonoBehaviour
     public float x;
     public float z;
     public float yRot = 0f;
-    public float moveSpeed = 10f;
-    public float mouseSens = 500f;
+    public float moveSpeed = 7f;
+    public float mouseSens = 400f;
     public float gravity = -13f;
     public Transform groundCheck;
     public float groundDist = 0.7f;
@@ -27,17 +27,17 @@ public class V2move : MonoBehaviour
     public float zMove = 0f;
     public float decel = 0.983f;
     public float currentSpeed = 0f;
-    public float airControl = 0.5f;
+    public float airControl = 2f;
     public int direction;
     public Vector3 airMove;
-    public float smooth = 50f;
-    public float runAddModifier = 0.4f;
+    public float smooth = 10f;
+    public float runAddModifier = 0.6f;
     public Vector3 momentum;
     public float moveMag;
     public Vector3 moveDir;
     public Vector3 totalMove;
-    public float friction = 10f;
-    public float defaultGravity = -6f;
+    public float friction = 13f;
+    public float defaultGravity = 0f;
     public float crouchSlowModifier = 0.4f;
     public float crouchFrictionModifier = 0.3f;
     private float moveSpeedHolder;
@@ -51,7 +51,7 @@ public class V2move : MonoBehaviour
     public Vector3 dash;
     public Vector3 rotationAmount;
     public float mouseX;
-    public float snappiness = 0.15f;
+    public float snappiness = 0.1f;
     public float posToRotateTo = 0f;
     public Health playerHealth;
     public float repairProgress;
@@ -60,10 +60,10 @@ public class V2move : MonoBehaviour
     public float dashingLeft;
     public bool isDashing;
     public Image stamBar;
-    public float stamLeft;
+    public float stamLeft = 12;
     public float stamMax = 12;
     public float stamUsedOnMove = 4;
-    public float dashJump;
+    public float dashJump = 3;
     RaycastHit slopeHit;
     public Vector3 slopeMove;
     public float slopeAngle;
@@ -73,7 +73,7 @@ public class V2move : MonoBehaviour
     public Vector3 toMove;
     public bool doneMove;
     public bool fell;
-    public float slideTime;
+    public float slideTime = 0.8f;
     public float slideLeft;
     public bool isSprinting;
     public bool isCrouching;
@@ -147,7 +147,7 @@ public class V2move : MonoBehaviour
         }
 
         //changes y rotation of the player body based on mouse movement in the y rotation
-        mouseX = Input.GetAxisRaw("Mouse X") * mouseSens * Time.deltaTime;
+        mouseX = Input.GetAxisRaw("Mouse X");// * mouseSens * Time.deltaTime;
         rotationAmount = new Vector3(0f, mouseX, 0f);
         transform.Rotate(rotationAmount);
 
@@ -240,16 +240,16 @@ public class V2move : MonoBehaviour
             if (isGrounded)
             {
                 if (Input.GetButton("Crouch")){
-                    move = Vector3.Lerp(move, moveDir * moveSpeed * (crouchSlowModifier), 0.02f);
+                    move = Vector3.Lerp(move, moveDir * moveSpeed * (crouchSlowModifier), 0.02f * 300 * Time.deltaTime);
                     isCrouching = true;
                 }
                 else if (Input.GetKey(KeyCode.LeftShift) && z > 0){
-                    move = Vector3.Lerp(move, moveDir * moveSpeed * (runAddModifier + 1), 0.02f);
+                    move = Vector3.Lerp(move, moveDir * moveSpeed * (runAddModifier + 1), 0.02f * 300 * Time.deltaTime);
                     isSprinting = true;
                     isCrouching = false;
                 }
                 else{
-                    move = Vector3.Lerp(move, moveDir * moveSpeed, 0.02f);
+                    move = Vector3.Lerp(move, moveDir * moveSpeed, 0.02f * 300 * Time.deltaTime);
                     isSprinting = false;
                     isCrouching = false;
                 }
@@ -259,15 +259,15 @@ public class V2move : MonoBehaviour
                 if(moveDir.magnitude != 0)
                 {
                     if (move.magnitude > moveSpeed){
-                        move = Vector3.Lerp(move, moveDir * moveSpeed * (runAddModifier + 1), 0.02f / airControl);
+                        move = Vector3.Lerp(move, moveDir * moveSpeed * (runAddModifier + 1), 0.02f / airControl * 300 * Time.deltaTime);
                     }
                     else{
-                        move = Vector3.Lerp(move, moveDir * moveSpeed, 0.02f / airControl);
+                        move = Vector3.Lerp(move, moveDir * moveSpeed, 0.02f / airControl * 300 * Time.deltaTime);
                     }
                 }
                 else if (move.magnitude > moveSpeed)
                 {
-                    move = Vector3.Lerp(move, move.normalized * moveSpeed * (runAddModifier + 1), 0.02f / airControl);
+                    move = Vector3.Lerp(move, move.normalized * moveSpeed * (runAddModifier + 1), 0.02f / airControl * 300 * Time.deltaTime);
                 }
             }
         }

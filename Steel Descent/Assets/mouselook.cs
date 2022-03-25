@@ -38,7 +38,7 @@ public class mouselook : MonoBehaviour
         else{
             waitAfterStopFiringProgress = 0;
         }
-        float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSens * Time.deltaTime;
+        float mouseY = Input.GetAxisRaw("Mouse Y");// * mouseSens * Time.deltaTime;
         xRot -= mouseY;
         xRot = Mathf.Clamp(xRot, -90f, 90f);
         if (Mathf.Abs(posToRotateTo) > 0.02f){

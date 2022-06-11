@@ -43,7 +43,7 @@ public class mouselook : MonoBehaviour
         xRot = Mathf.Clamp(xRot, -90f, 90f);
         if (Mathf.Abs(posToRotateTo) > 0.02f){
             transform.localRotation = Quaternion.Euler(xRot += Mathf.Lerp(0, posToRotateTo, snappiness), 0f, 0f);
-            posToRotateTo -= posToRotateTo * snappiness;
+            posToRotateTo -= posToRotateTo * snappiness * 300 * Time.deltaTime;
         }
         else{
             posToRotateTo = 0;

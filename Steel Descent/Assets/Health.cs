@@ -14,7 +14,7 @@ public class Health : MonoBehaviour
     public float healthRegenDelay = 0.5f;
     public bool inCombat;
     private Coroutine shieldRegenerationActive;
-    private Coroutine healthRegenerationActive;
+    public Coroutine healthRegenerationActive;
     
     void Start()
     {
@@ -33,41 +33,45 @@ public class Health : MonoBehaviour
     public void healShields(int healAmount)
     {
         currentShields += healAmount;
-        Debug.Log("Shields healed for " + healAmount);
+        //Debug.Log("Shields healed for " + healAmount);
     }
 
     public void healHealth(int healAmount)
     {
         currentHealth += healAmount;
-        Debug.Log("Health healed for " + healAmount);
+        //Debug.Log("Health healed for " + healAmount);
     }
 
     public void startHealthRegen()
     {
-        if (healthRegenerationActive == null)
-        {
-            healthRegenerationActive = StartCoroutine(regenHealth());
+        if (healthRegenerationActive != null)
+        { 
+            StopCoroutine(healthRegenerationActive);
         }
+        healthRegenerationActive = StartCoroutine(regenHealth());
     }
 
     public void stopHealthRegen()
     {
-        StopCoroutine(healthRegenerationActive);
+        if(healthRegenerationActive != null){
+            StopCoroutine(healthRegenerationActive);
+            Debug.Log("health regen has been stopped");
+        }
     }
 
     public void takeDamage(int damage)
     {
         int damageRollover = 0;
         currentShields -= damage;
-        Debug.Log("Shields took " + damage + " damage");
+        //Debug.Log("Shields took " + damage + " damage");
         if (currentShields < 0)
         {
             damageRollover = Mathf.Abs(currentShields);
-            Debug.Log("Damage rollover is " + damageRollover + " damage");
+            //Debug.Log("Damage rollover is " + damageRollover + " damage");
             currentShields = 0;
         }
         currentHealth -= damageRollover;
-        Debug.Log("Health took " + damageRollover + " damage");
+       // Debug.Log("Health took " + damageRollover + " damage");
         if (currentHealth < 0)
         {
             Debug.Log("I'm dead");
@@ -95,27 +99,27 @@ public class Health : MonoBehaviour
             if (currentShields > maxShields)
             {
                 currentShields = maxShields;
-                Debug.Log("Regen Stopped. Shields are " + currentShields);
+                //Debug.Log("Regen Stopped. Shields are " + currentShields);
                 yield break;
             }
-            Debug.Log("Shields Regen, " + currentShields);
+            //Debug.Log("Shields Regen, " + currentShields);
             yield return new WaitForSeconds(1 / shieldRegenSpeed);
         }
     }
 
     private IEnumerator regenHealth()
     {
-        yield return new WaitForSeconds(healthRegenDelay);
+        //yield return new WaitForSeconds(healthRegenDelay);
         while (currentHealth < maxHealth)
         {
             healHealth(1);
             if (currentHealth > maxHealth)
             {
                 currentHealth = maxHealth;
-                Debug.Log("Regen Stopped. Health is " + currentHealth);
+                //Debug.Log("Regen Stopped. Health is " + currentHealth);
                 yield break;
             }
-            Debug.Log("Health Regen, " + currentHealth);
+            //Debug.Log("Health Regen, " + currentHealth);
             yield return new WaitForSeconds(1 / healthRegenSpeed);
         }
     }

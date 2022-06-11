@@ -164,10 +164,15 @@ public class V2move : MonoBehaviour
                 x = 0;
                 z = 0;
             }
+            //else{
+                
+            //}
         }
         else{
             repairProgress = 0;
+            playerHealth.stopHealthRegen();
         }
+        
 
         //realizes the x and z components the player is moving with into a vector3 direction
         moveDir = (transform.right * x + transform.forward * z);
@@ -180,7 +185,7 @@ public class V2move : MonoBehaviour
         if (Mathf.Abs(posToRotateTo) > 0.02f){
             rotationAmount = new Vector3(0f, Mathf.Lerp(0, posToRotateTo, snappiness), 0f);
             transform.Rotate(rotationAmount);
-            posToRotateTo -= posToRotateTo * snappiness;
+            posToRotateTo -= posToRotateTo * snappiness * 300 * Time.deltaTime;
         }
         else{
             posToRotateTo = 0;
